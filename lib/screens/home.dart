@@ -20,19 +20,41 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double _currentPrice = 1.0;
+  int _currentHour = new DateTime.now().hour;
+  int _currentMinute = 2;
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: new Center(
-        child: new NumberPicker.decimal(
-            minValue: 0,
-            maxValue: 24,
-            initialValue: _currentPrice,
-            onChanged: (hour) {
-
-            },),
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new NumberPicker.integer(
+              minValue: 0,
+              maxValue: 24,
+              initialValue: _currentHour,
+              isQuarter: false,
+              onChanged: (hour) {
+                setState(() {
+                  _currentHour = hour;
+                });
+              },
+            ),
+            new Text(" : "),
+            new NumberPicker.integer(
+              minValue: 0,
+              maxValue: 3,
+              initialValue: _currentMinute,
+              isQuarter: true,
+              onChanged: (minute) {
+                setState(() {
+                  _currentMinute = minute;
+                });
+              },
+            ),
+          ],
+        ),
       ),
       appBar: new AppBar(
         title: new Text(widget.title),

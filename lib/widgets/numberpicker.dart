@@ -22,6 +22,7 @@ class NumberPicker extends StatelessWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
+    @required this.isQuarter,
     this.itemExtent = DEFAULT_ITEM_EXTENT,
     this.listViewWidth = DEFAULT_LISTVIEW_WIDTH,
     this.horizontal = false,
@@ -48,6 +49,7 @@ class NumberPicker extends StatelessWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
+    @required this.isQuarter,
     this.decimalPlaces = 1,
     this.itemExtent = DEFAULT_ITEM_EXTENT,
     this.listViewWidth = DEFAULT_LISTVIEW_WIDTH,
@@ -113,6 +115,9 @@ class NumberPicker extends StatelessWidget {
   //horizontal view?
   final bool horizontal;
 
+  //horizontal view?
+  final bool isQuarter;
+
   //
   //----------------------------- PUBLIC ------------------------------
   //
@@ -148,7 +153,11 @@ class NumberPicker extends StatelessWidget {
     final ThemeData themeData = Theme.of(context);
 
     if (decimalPlaces == 0) {
-      return _integerListView(themeData);
+      if(isQuarter) {
+        return _quarterListView(themeData);
+      }else{
+        return _integerListView(themeData);
+      }
     } else if (horizontal) {
       return new Column(
         children: <Widget>[
@@ -166,6 +175,48 @@ class NumberPicker extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
       );
     }
+  }
+
+  Widget _quarterListView(ThemeData themeData) {
+    TextStyle defaultStyle = themeData.textTheme.body1;
+    TextStyle selectedStyle =
+    themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+
+    int itemCount = maxValue - minValue + 3;
+
+    return new NotificationListener(
+      child: new Container(
+        height: listViewHeight,
+        width: listViewWidth,
+        child: new ListView.builder(
+          scrollDirection: (horizontal) ? Axis.horizontal : Axis.vertical,
+          controller: intScrollController,
+          itemExtent: itemExtent,
+          itemCount: itemCount,
+          itemBuilder: (BuildContext context, int index) {
+            final int value = minValue + index - 1;
+
+            //define special style for selected (middle) element
+            final TextStyle itemStyle =
+            value == selectedIntValue ? selectedStyle : defaultStyle;
+
+            bool isExtra = index == 0 || index == itemCount - 1;
+
+            return isExtra
+                ? new Container() //empty first and last element
+                : new Center(
+              child: new Text(getQuarter(value), style: itemStyle),
+            );
+          },
+        ),
+      ),
+      onNotification: _onIntegerNotification,
+    );
+  }
+
+  getQuarter(int value){
+    var quarters = ["00", "15", "30", "45"];
+    return quarters[value];
   }
 
   Widget _integerListView(ThemeData themeData) {
@@ -196,7 +247,7 @@ class NumberPicker extends StatelessWidget {
             return isExtra
                 ? new Container() //empty first and last element
                 : new Center(
-              child: new Text(value.toString(), style: itemStyle),
+              child: new Text(getTwoDigitsString(value.toString()), style: itemStyle),
             );
           },
         ),
@@ -204,6 +255,16 @@ class NumberPicker extends StatelessWidget {
       onNotification: _onIntegerNotification,
     );
   }
+
+  getTwoDigitsString(String value) {
+    if(value.length == 1){
+      return "0" + value;
+    }else{
+      return value;
+    }
+  }
+
+
 
 
   Widget _decimalListView(ThemeData themeData) {
@@ -256,6 +317,8 @@ class NumberPicker extends StatelessWidget {
       int intIndexOfMiddleElement = (horizontal) ? (notification.metrics
           .pixels + listViewWidth / 2) ~/ itemExtent :
       (notification.metrics.pixels + listViewHeight / 2) ~/ itemExtent;
+
+
       int intValueInTheMiddle = minValue + intIndexOfMiddleElement - 1;
 
       if (_userStoppedScrolling(notification, intScrollController)) {
