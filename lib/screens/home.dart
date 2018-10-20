@@ -19,9 +19,9 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => new _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int _currentHour = new DateTime.now().hour;
-  int _currentMinute = 2;
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
+  int _currentHour = roundToQuarterHour();
+  int _currentMinute = roundToQuarterMinute();
 
   @override
   Widget build(BuildContext context) {
@@ -64,5 +64,24 @@ class _HomePageState extends State<HomePage> {
         onPressed: () => true
       ),
     );
+  }
+
+  static roundToQuarterHour() {
+    var minute = 15;
+    var hour = new DateTime.now().hour;
+    if(minute > 45 && ((((minute/15).round()) * 15) % 60) == 0){
+      return hour + 1;
+    }else {
+      return hour;
+    }
+  }
+
+  static roundToQuarterMinute() {
+    var minute = new DateTime.now().minute;
+    var quarters = ["00", "15", "30", "45"];
+    minute = (((minute/15).round()) * 15) % 60;
+    var minuteString = minute.toString().length == 1 ? "0" + minute.toString() : minute.toString();
+    return quarters.indexOf(minuteString);
+
   }
 }
