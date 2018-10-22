@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:business_timetracker/widgets/numberpicker.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
               minValue: 0,
               maxValue: 24,
               initialValue: _currentHour,
-              isQuarter: false,
               onChanged: (hour) {
                 setState(() {
                   _currentHour = hour;
@@ -44,9 +43,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
             new Text(" : "),
             new NumberPicker.integer(
               minValue: 0,
-              maxValue: 3,
+              maxValue: 59,
+              step: 15,
               initialValue: _currentMinute,
-              isQuarter: true,
               onChanged: (minute) {
                 setState(() {
                   _currentMinute = minute;
@@ -67,7 +66,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
   }
 
   static roundToQuarterHour() {
-    var minute = 15;
+    var minute = new DateTime.now().minute;
     var hour = new DateTime.now().hour;
     if(minute > 45 && ((((minute/15).round()) * 15) % 60) == 0){
       return hour + 1;
@@ -78,10 +77,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
   static roundToQuarterMinute() {
     var minute = new DateTime.now().minute;
-    var quarters = ["00", "15", "30", "45"];
     minute = (((minute/15).round()) * 15) % 60;
-    var minuteString = minute.toString().length == 1 ? "0" + minute.toString() : minute.toString();
-    return quarters.indexOf(minuteString);
+    return minute;
 
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:business_timetracker/widgets/numberpicker.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
