@@ -39,8 +39,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                   _currentHour = hour;
                 });
               },
+              listViewWidth: 50.0,
+              itemExtent: 40.0,
             ),
-            new Text(" : "),
+            new Text(
+              " : ",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
+            ),
             new NumberPicker.integer(
               minValue: 0,
               maxValue: 59,
@@ -51,6 +56,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                   _currentMinute = minute;
                 });
               },
+              listViewWidth: 50.0,
+              itemExtent: 40.0,
             ),
           ],
         ),
