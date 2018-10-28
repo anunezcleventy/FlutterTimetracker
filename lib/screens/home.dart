@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
   int _currentHour = roundToQuarterHour();
-  int _currentMinute = roundToQuarterMinute();
+  //int _currentMinute = roundToQuarterMinute();
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +30,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new NumberPicker.integer(
-              minValue: 0,
-              maxValue: 24,
+            new NumberPicker.hour(
               initialValue: _currentHour,
               onChanged: (hour) {
                 setState(() {
@@ -45,8 +43,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
             new Text(
               " : ",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
-            ),
-            new NumberPicker.integer(
+            )/*,
+            new NumberPicker.hour(
               minValue: 0,
               maxValue: 59,
               step: 15,
@@ -58,7 +56,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
               },
               listViewWidth: 50.0,
               itemExtent: 40.0,
-            ),
+            ),*/
           ],
         ),
       ),

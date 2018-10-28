@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:business_timetracker/widgets/mynumberpicker.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -23,17 +22,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentPrice = 1;
 
   _showDialog() {
-    showDialog(
-      context: context,
-      child: new NumberPicker.integer(
-          minValue: 1,
-          maxValue: 10,
-          initialValue: _currentPrice),
-    ).then((value) {
-      if (value != null) {
-        setState(() => _currentPrice = value);
-      }
-    });
   }
 
   @override
